@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/davecgh/go-spew/spew"
+	"github.com/markelog/eclectica/cmd/print"
 	"github.com/markelog/linteum/linteum"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
@@ -22,6 +24,7 @@ func (p *list) IsCumulative() bool {
 
 func pathList(s kingpin.Settings) (target *[]string) {
 	target = new([]string)
+
 	s.SetValue((*list)(target))
 
 	return
@@ -37,5 +40,10 @@ func main() {
 
 	test := linteum.New(*paths)
 
-	test.Lint()
+	err := test.Lint()
+	if err != nil {
+		print.Error(err)
+	}
+
+	spew.Dump(err)
 }
