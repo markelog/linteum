@@ -5,6 +5,8 @@ import (
 	"github.com/markelog/eclectica/cmd/print"
 	"github.com/markelog/linteum/linteum"
 	"gopkg.in/alecthomas/kingpin.v2"
+
+	"github.com/markelog/linteum/config"
 )
 
 type list []string
@@ -31,7 +33,8 @@ func pathList(s kingpin.Settings) (target *[]string) {
 }
 
 var (
-	paths = pathList(kingpin.Arg("path", "path to lint"))
+	paths = pathList(kingpin.Arg("path", "Path to lint"))
+	conf  = kingpin.Flag("config", "Path to config").Default("linteum.yaml").String()
 )
 
 func main() {
@@ -45,5 +48,10 @@ func main() {
 		print.Error(err)
 	}
 
-	spew.Dump(err)
+	configuration, err := config.New(*conf)
+	if err != nil {
+		print.Error(err)
+	}
+
+	spew.Dump(configuration.Rules["test"])
 }

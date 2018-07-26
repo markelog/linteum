@@ -5,7 +5,6 @@ import (
 	"io"
 	"os"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/moby/buildkit/frontend/dockerfile/parser"
 )
 
@@ -38,8 +37,7 @@ func (linteum *Linteum) Check(file io.Reader) (*parser.Node, error) {
 		return nil, err
 	}
 
-	spew.Dump(ast)
-	return nil, nil
+	return ast, nil
 }
 
 func (linteum *Linteum) Lint() error {
