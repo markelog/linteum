@@ -1,2 +1,3 @@
 rules:
-  test: 'on'
+  absolute-workdir: 
+      enable: true 

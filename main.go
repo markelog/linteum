@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/davecgh/go-spew/spew"
 	"github.com/markelog/eclectica/cmd/print"
 	"github.com/markelog/linteum/linteum"
+	"github.com/markelog/linteum/rules"
 	"gopkg.in/alecthomas/kingpin.v2"
 
 	"github.com/markelog/linteum/config"
@@ -53,5 +53,12 @@ func main() {
 		print.Error(err)
 	}
 
-	spew.Dump(configuration.Rules["test"])
+	config := configuration.Rules
+	data := map[string]interface{}{}
+
+	for name, rule := range config {
+		data[name] = rule
+	}
+
+	rules.New(data)
 }

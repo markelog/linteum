@@ -1,29 +1,31 @@
 package config
 
 import (
-	"github.com/micro/go-config"
-	"github.com/micro/go-config/source/file"
+	"github.com/spf13/viper"
 )
 
 type Config struct {
-	Rules map[string]string `json:"rules"`
+	config *viper.Viper
+	Rules  map[string]interface{}
 }
 
-var conf Config
+func New(path string) (*Config, error) {
+	config := viper.New()
 
-func New(path string) (Config, error) {
-	var (
-		configuration = config.NewConfig()
-		err           = configuration.Load(file.NewSource(
-			file.WithPath(path),
-		))
-	)
+	config.SetConfigName("linteum")
+	config.SetConfigFile(path)
+	config.AddConfigPath(".")
+	config.SetConfigType("yaml")
 
+	err := config.ReadInConfig()
 	if err != nil {
-		return conf, err
+		return nil, err
 	}
 
-	configuration.Scan(&conf)
+	result := &Config{
+		config: config,
+		Rules:  config.GetStringMap("rules"),
+	}
 
-	return conf, nil
+	return result, nil
 }
